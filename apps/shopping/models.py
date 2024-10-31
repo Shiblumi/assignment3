@@ -20,7 +20,7 @@ def get_user_id_by_email(email):
 db.define_table('item_list',
     Field('item_name', requires=IS_NOT_EMPTY()),
     Field('is_purchased', 'boolean', default=False),
-    Field('user_email', 'string', unique=True),
+    Field('user_email', 'string'),
     )
 
 db.commit()

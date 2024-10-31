@@ -18,9 +18,9 @@
         <td><input class="input add-item" type="text" v-model="item_name" name="new_item"></td>
         <td class="is-narrow"></td>
       </tr>
-      <tr class="item-row">
-        <td class="check is-narrow"><input type="checkbox"></td>
-        <td class="item"></td>
+      <tr class="item-row" v-for="item in item_list" :key="item.id">
+        <td class="check is-narrow"><input type="checkbox" v-model="item.is_purchased"></td>
+        <td class="item"> {{item.item_name}}</td>
         <td class="trash is-narrow"><i class="trash has-text-danger fa fa-trash"></i></td>
       </tr>
     </table>

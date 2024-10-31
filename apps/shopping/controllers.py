@@ -51,7 +51,7 @@ def load_data():
     item_list = []
     if user_email:
         item_list = db(db.item_list.user_email == user_email).select().as_list()
-    return dict(items=item_list, user_email=user_email)
+    return dict(item_list=item_list, user_email=user_email)
 
 
 @action('add_item', method=['POST'])
