@@ -16,6 +16,14 @@ app.data = {
     },
     methods: {
         // Complete as you see fit.
+        load_data: function() {
+            axios.get(load_data_url).then(function (r) {
+                app.vue.item_list = r.data.item_list;
+                app.vue.user_email = r.data.user_email;
+            });
+        },
+
+
         add_item: function() {
             axios.post(add_item_url, {
                 item_name: this.item_name,
@@ -25,7 +33,15 @@ app.data = {
                 app.vue.item_name = "";
             });
         },
+
+        del_item: function(id) {
+            axios.post(del_item_url, {
+                id: id,
+            }).then(function (r) {
+                app.load_data();
+            });
         },
+    }
 };
 
 app.vue = Vue.createApp(app.data).mount("#app");

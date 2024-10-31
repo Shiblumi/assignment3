@@ -37,10 +37,9 @@ url_signer = URLSigner(session)
 @action.uses('index.html', db, auth.user)
 def index():
     return dict(
-        # For example...
         load_data_url = URL('load_data'),
         add_item_url = URL('add_item'),
-        # Add other things here.
+        del_item_url = URL('del_item'),
     )
 
 
@@ -59,6 +58,17 @@ def load_data():
 def add_item():
     item_name = request.json.get('item_name')
     user_email = get_user_email()
-    id = db.item_list.insert(user_email=user_email, item_name=item_name)
+    id = db.item_list.insert(user_email=user_email, 
+                             item_name=item_name)
     return dict(id=id)
+
+
+@action('del_item', method=['POST'])
+@action.uses(db, auth.user)
+def del_item():
+    user_email = get_user_email()
+    id = request.json.get('id')
+    db((db.item_list.id == id ) &
+       (db.item_list.user_email == user_email)).delete()
+    return "ok"
 
