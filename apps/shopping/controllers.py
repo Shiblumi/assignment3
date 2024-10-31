@@ -29,7 +29,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email
+from .models import get_user_email, get_user_id_by_email
 
 url_signer = URLSigner(session)
 
@@ -42,10 +42,30 @@ def index():
         # Add other things here.
     )
 
+
 @action('load_data')
 @action.uses(db, auth.user)
 def load_data():
-    # Complete.
-    return dict()
+    user_email = get_user_email()
+    items = []
+    if user_email:
+        items = db(db.item_list.user_email == user_email).select().as_list()
+    return dict(items=items, user_email=user_email)
 
-# You can add other controllers here.
+
+@action('register', method=['GET', 'POST'])
+@action.uses('auth.html', db, session, auth)
+def register():
+    form = auth.register()
+    if form.accepted:
+        redirect(URL('index'))
+    return dict(form=form)
+
+
+@action('signin', method=['GET', 'POST'])
+@action.uses('auth.html', db, session, auth)
+def signin():
+    form = auth.login()
+    if form.accepted:
+        redirect(URL('index'))
+    return dict(form=form)

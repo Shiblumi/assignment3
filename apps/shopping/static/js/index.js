@@ -9,6 +9,8 @@ app.data = {
     data: function() {
         return {
             // Complete as you see fit.
+             item_list: [],
+             user_email: "",
         };
     },
     methods: {

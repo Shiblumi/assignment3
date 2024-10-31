@@ -13,9 +13,14 @@ def get_user_email():
 def get_time():
     return datetime.datetime.utcnow()
 
-# Add here any table definition you need. Below is an example.
-# db.define_table('shopping_list',
-#    Field('product_name', requires=IS_NOT_EMPTY()),
-#    )
+def get_user_id_by_email(email):
+    user = db(db.users.email == email).select().first()
+    return user.id if user else None
+
+db.define_table('item_list',
+    Field('item_name', requires=IS_NOT_EMPTY()),
+    Field('is_purchased', 'boolean', default=False),
+    Field('user_email', default=get_user_email),
+    )
 
 db.commit()
