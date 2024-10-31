@@ -40,6 +40,7 @@ def index():
         load_data_url = URL('load_data'),
         add_item_url = URL('add_item'),
         del_item_url = URL('del_item'),
+        toggle_item_url = URL('toggle_item'),
     )
 
 
@@ -58,9 +59,12 @@ def load_data():
 def add_item():
     item_name = request.json.get('item_name')
     user_email = get_user_email()
-    id = db.item_list.insert(user_email=user_email, 
-                             item_name=item_name)
-    return dict(id=id)
+    if user_email and item_name:
+        id = db.item_list.insert(user_email=user_email, 
+                                item_name=item_name)
+        return dict(id=id)
+    else:
+        return "error"
 
 
 @action('del_item', method=['POST'])
@@ -72,3 +76,13 @@ def del_item():
        (db.item_list.user_email == user_email)).delete()
     return "ok"
 
+
+@action('toggle_item', method=['POST'])
+@action.uses(db, auth.user)
+def toggle_item():
+    user_email = get_user_email()
+    id = request.json.get('id')
+    is_purchased = request.json.get('is_purchased')
+    db((db.item_list.id == id ) &
+       (db.item_list.user_email == user_email)).update(is_purchased=is_purchased)
+    return "ok"

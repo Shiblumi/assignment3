@@ -41,6 +41,16 @@ app.data = {
                 app.load_data();
             });
         },
+
+        toggle_item: function(item) {
+            item.is_purchased = !item.is_purchased;
+            axios.post(toggle_item_url, {
+                id: item.id,
+                is_purchased: item.is_purchased,
+            }).then(function (r) {
+                app.load_data();
+            });
+        }
     }
 };
 

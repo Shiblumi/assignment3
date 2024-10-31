@@ -19,7 +19,7 @@
         <td class="is-narrow"></td>
       </tr>
       <tr class="item-row" v-for="item in item_list" :key="item.id">
-        <td class="check is-narrow"><input type="checkbox" v-model="item.is_purchased"></td>
+        <td class="check is-narrow"><input type="checkbox" v-model="item.is_purchased" v-on:click="toggle_item(item)"></td>
         <td class="item"> {{item.item_name}}</td>
         <td class="trash is-narrow"><i class="trash has-text-danger fa fa-trash" v-on:click="del_item(item.id)"></i></td>
       </tr>
@@ -34,6 +34,7 @@
   let load_data_url = "[[=XML(load_data_url)]]";
   let add_item_url = "[[=XML(add_item_url)]]";
   let del_item_url = "[[=XML(del_item_url)]]";
+  let toggle_item_url = "[[=XML(toggle_item_url)]]";
   // Add other URLs here if you wish.
 </script>
 <script src="js/index.js"></script>
