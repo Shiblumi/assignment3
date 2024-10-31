@@ -4,6 +4,17 @@
 // and be used to initialize it.
 let app = {};
 
+function format_list(item_list) {
+    let formatted_item_list = [];
+    item_list.forEach((e) => {
+        if (e.is_purchased) {
+            formatted_item_list.unshift(e); // Add purchased items to the front
+        } else {
+            formatted_item_list.push(e); // Add non-purchased items to the end
+        }
+    });
+    return formatted_item_list;
+}
 
 app.data = {
     data: function() {
@@ -50,7 +61,7 @@ app.data = {
             }).then(function (r) {
                 app.load_data();
             });
-        }
+        },
     }
 };
 
@@ -58,7 +69,8 @@ app.vue = Vue.createApp(app.data).mount("#app");
 
 app.load_data = function () {
     axios.get(load_data_url).then(function (r) {
-        app.vue.item_list = r.data.item_list;
+        let formatted_item_list = format_list(r.data.item_list);
+        app.vue.item_list = formatted_item_list;
         app.vue.user_email = r.data.user_email;
     });
 }
