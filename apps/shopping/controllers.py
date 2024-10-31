@@ -39,6 +39,7 @@ def index():
     return dict(
         # For example...
         load_data_url = URL('load_data'),
+        add_item_url = URL('add_item'),
         # Add other things here.
     )
 
@@ -47,25 +48,17 @@ def index():
 @action.uses(db, auth.user)
 def load_data():
     user_email = get_user_email()
-    items = []
+    item_list = []
     if user_email:
-        items = db(db.item_list.user_email == user_email).select().as_list()
-    return dict(items=items, user_email=user_email)
+        item_list = db(db.item_list.user_email == user_email).select().as_list()
+    return dict(items=item_list, user_email=user_email)
 
 
-@action('register', method=['GET', 'POST'])
-@action.uses('auth.html', db, session, auth)
-def register():
-    form = auth.register()
-    if form.accepted:
-        redirect(URL('index'))
-    return dict(form=form)
+@action('add_item', method=['POST'])
+@action.uses(db, auth.user)
+def add_item():
+    item_name = request.json.get('item_name')
+    user_email = get_user_email()
+    id = db.item_list.insert(user_email=user_email, item_name=item_name)
+    return dict(id=id)
 
-
-@action('signin', method=['GET', 'POST'])
-@action.uses('auth.html', db, session, auth)
-def signin():
-    form = auth.login()
-    if form.accepted:
-        redirect(URL('index'))
-    return dict(form=form)

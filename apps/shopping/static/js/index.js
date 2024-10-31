@@ -11,17 +11,30 @@ app.data = {
             // Complete as you see fit.
              item_list: [],
              user_email: "",
+             item_name: "",
         };
     },
     methods: {
         // Complete as you see fit.
+        add_item: function() {
+            axios.post(add_item_url, {
+                item_name: this.item_name,
+                user_email: this.user_email,
+            }).then(function (r) {
+                app.load_data();
+                app.vue.item_name = "";
+            });
+        },
         },
 };
 
 app.vue = Vue.createApp(app.data).mount("#app");
 
 app.load_data = function () {
-    // Complete.
+    axios.get(load_data_url).then(function (r) {
+        app.vue.item_list = r.data.item_list;
+        app.vue.user_email = r.data.user_email;
+    });
 }
 
 // This is the initial data load.
