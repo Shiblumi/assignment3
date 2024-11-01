@@ -8,9 +8,9 @@ function format_list(item_list) {
     let formatted_item_list = [];
     item_list.forEach((e) => {
         if (e.is_purchased) {
-            formatted_item_list.unshift(e); // Add purchased items to the front
+            formatted_item_list.push(e); // Add purchased items to the front
         } else {
-            formatted_item_list.push(e); // Add non-purchased items to the end
+            formatted_item_list.unshift(e); // Add non-purchased items to the end
         }
     });
     return formatted_item_list;
